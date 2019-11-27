@@ -8,6 +8,8 @@
  * @date 11/2019
  */
 
+#include <string.h>
+
 #include "serial.h"
 
 #include "usart.h"

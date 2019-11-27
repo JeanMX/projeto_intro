@@ -1,40 +1,32 @@
-#ifndef __KeyPad.h__
-#define __Keypad.h__
+#ifndef __KEYPAD_H__
+#define __KEYPAD_H__
 
+#include <stdbool.h>
+
+#include "main.h"
 #include "gpio.h"
+#include "mcu.h"
 
-int keypad_value(int x, int y);
+typedef struct __attribute__((packed)) pin {
+    GPIO_TypeDef* port;
+    uint16_t pin;
+} pin_t;
 
-const GPIO_TypeDef* _KEYPAD_COLUMN_GPIO_PORT[] =
-{
-															GPIOA,
-															GPIOA,
-															GPIOA,
-															GPIOA
-};
 
-const uint16_t _KEYPAD_COLUMN_GPIO_PIN[] =
-{
-															GPIO_PIN_0,
-															GPIO_PIN_1,
-															GPIO_PIN_2,
-															GPIO_PIN_3
-};
+/*****************************************
+ * Public Function Prototypes
+ *****************************************/
 
-const GPIO_TypeDef* _KEYPAD_ROW_GPIO_PORT[] =
-{
-															GPIOA,
-															GPIOA,
-															GPIOA,
-															GPIOA
-};
+/**
+ * @brief Initializes serial comm.
+ */
+void keypad_init(void);
 
-const uint16_t _KEYPAD_ROW_GPIO_PIN[] =
-{
-															GPIO_PIN_4,
-															GPIO_PIN_5,
-															GPIO_PIN_6,
-															GPIO_PIN_7
-};
+/**
+ * @brief Send data through serial comm.
+ *
+ * @param data Data to be sent.
+ */
+bool keypad_read(char* c);
 
-#endif
+#endif // __KEYPAD_H__
