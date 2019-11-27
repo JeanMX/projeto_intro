@@ -7,25 +7,20 @@
 #include "gpio.h"
 #include "mcu.h"
 
-typedef struct __attribute__((packed)) pin {
-    GPIO_TypeDef* port;
-    uint16_t pin;
-} pin_t;
-
 
 /*****************************************
  * Public Function Prototypes
  *****************************************/
 
 /**
- * @brief Initializes serial comm.
+ * @brief Initializes keypad
  */
 void keypad_init(void);
 
 /**
  * @brief Send data through serial comm.
  *
- * @param data Data to be sent.
+ * @param c Pointer to store character
  */
 bool keypad_read(char* c);
 

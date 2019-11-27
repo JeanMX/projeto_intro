@@ -3,6 +3,11 @@
 #define NUMBER_OF_LINES 4
 #define NUMBER_OF_COLUMNS 3
 
+typedef struct __attribute__((packed)) pin {
+    GPIO_TypeDef* port;
+    uint16_t pin;
+} pin_t;
+
 static char buttons_symbols[NUMBER_OF_LINES][NUMBER_OF_COLUMNS] = {
     {'1', '2', '3'},
     {'4', '5', '6'},
