@@ -3,6 +3,8 @@
 #include "tim.h"
 #include "stm32f0xx_hal_tim.h"
 
+#include "utils.h"
+
 #define TIM_PERIOD 1000
 
 typedef struct __attribute__((packed)) fan_pin {
@@ -58,6 +60,6 @@ void fans_set(fan_t fan, uint16_t speed) {
         HAL_TIM_PWM_Stop(fans[fan].htim, fans[fan].channel);
     } else {
         HAL_TIM_PWM_Start(fans[fan].htim, fans[fan].channel);
-        __HAL_TIM_SET_COMPARE(fans[i].htim, fans[i].channel, map(speed, 0, 100, 0, TIM_PERIOD));
+        __HAL_TIM_SET_COMPARE(fans[fan].htim, fans[fan].channel, map(speed, 0, 100, 0, TIM_PERIOD));
     }
 }

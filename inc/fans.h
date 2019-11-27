@@ -28,6 +28,6 @@ void fans_init(void);
  *
  * @param fan Which fan to control.
  */
-void fans_set(fan_t* fan, uint16_t speed);
+void fans_set(fan_t fan, uint16_t speed);
 
 #endif // __FANS_H__
