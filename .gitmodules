@@ -1,0 +1,3 @@
+[submodule "SerialSender"]
+	path = lib/SerialSender
+	url = https://github.com/LucasHaug/SerialSender.git
