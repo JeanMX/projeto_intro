@@ -5,13 +5,12 @@ void rele_init(void){
 }
 
 void rele_control(rele_control_t control_state){
-    switch (control_state)
-    {
-    case RELE_CONTROL_ON:
-        HAL_GPIO_WritePin(Rele_Pin, GPIO_PIN_SET);
-        break;
-    case RELE_CONTROL_OFF:
-        HAL_GPIO_WritePin(Rele_Pin, GPIO_PIN_RESET);
-        break;
+    switch (control_state) {
+        case RELE_CONTROL_ON:
+            HAL_GPIO_WritePin(Rele_GPIO_Port, Rele_Pin, GPIO_PIN_SET);
+            break;
+        case RELE_CONTROL_OFF:
+            HAL_GPIO_WritePin(Rele_GPIO_Port, Rele_Pin, GPIO_PIN_RESET);
+            break;
     }
 }
