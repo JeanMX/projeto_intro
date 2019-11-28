@@ -8,7 +8,7 @@ typedef struct __attribute__((packed)) pin {
     uint16_t pin;
 } pin_t;
 
-static char buttons_symbols[NUMBER_OF_LINES][NUMBER_OF_COLUMNS] = {
+static uint8_t buttons_symbols[NUMBER_OF_LINES][NUMBER_OF_COLUMNS] = {
     {'1', '2', '3'},
     {'4', '5', '6'},
     {'7', '8', '9'},
@@ -54,7 +54,7 @@ void keypad_init() {
     MX_GPIO_Init();
 }
 
-bool keypad_read(char* c) {
+bool keypad_read(uint8_t* value) {
     bool pressed = false;
     int linha = 0;
     int coluna = 0;
@@ -83,7 +83,7 @@ bool keypad_read(char* c) {
     }
 
     if (pressed) {
-        *c = buttons_symbols[linha][coluna];
+        *value = buttons_symbols[linha][coluna];
     }
 
     return pressed;
