@@ -2,30 +2,33 @@
 #include "main.h"
 #include "adc.h"
 #include "dma.h"
+#include "mcu.h"
 #include "utils.h"
 
-#define ADC_BUFFER_SIZE 512
+#define ADC_BUFFER_SIZE 256
 #define OLD_VALUE_WEIGHT 3
 #define NEW_VALUE_WEIGHT 1
+#define TEMPERATURE_OFFSET 0
 
-static uint32_t temperature = 0;
-//curto renzo melado
 static uint32_t adc_buffer[ADC_BUFFER_SIZE] = {0};
+
+static float temperature = 0;
 
 void sensor_init(void){
     MX_DMA_Init();
     MX_ADC_Init();
+
+    mcu_sleep(100);
+
     HAL_ADC_Start_DMA(&hadc, adc_buffer, ADC_BUFFER_SIZE);
 }
 
 float sensor_get_temperature() {
-    float current_temperature;
-    current_temperature = map(temperature / 100.0, 0, 3.3, 0, 5.0) * 10;
-    return current_temperature;
+    return map(temperature, 0, 4096, 0, 330) + TEMPERATURE_OFFSET;
 }
 
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc) {
-    uint32_t val = 0;
+    float val = 0;
 
     for (int i = 0; i < ADC_BUFFER_SIZE; i++) {
         val += adc_buffer[i];
