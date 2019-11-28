@@ -19,6 +19,7 @@
  *****************************************/
 
 typedef enum states {
+    INIT,
     CONFIGURATION,
     WAITING_FOR_START,
     RUNNING
@@ -34,18 +35,24 @@ int main(void) {
     mcu_init();
     serial_init();
     keypad_init();
-    // sensor_init();
-    fans_init();
     rele_init();
+    fans_init();
+    sensor_init();
 
     control_config_t configuration;
-    configuration.temp = 55;
-    configuration.fan_out_speed = 75;
-
-    state_t state = CONFIGURATION;
+    state_t state = INIT;
 
     for (;;) {
         switch (state) {
+            uint8_t command;
+            case INIT:
+                serial_printf("\tINICIALIZACAO\n");
+                configuration.temp = 45;
+                configuration.fan_out_speed = 75;
+                serial_printf("Pressione enter para iniciar ou back para configurar\n");
+                state = WAITING_FOR_START;
+                break;
+
             case CONFIGURATION:
                 if (get_configuration(configuration)) {
                     state = WAITING_FOR_START;
@@ -53,11 +60,12 @@ int main(void) {
                 break;
 
             case WAITING_FOR_START:
-                uint8_t comand;
                 if (keypad_read(&command)) {
                     if (command == '*') {
+                        serial_printf("\tCONFIGURACAO MANUAL\n");
                         state = CONFIGURATION;
                     } else if (command == '#') {
+                        serial_printf("GO\n");
                         state = RUNNING;
                     }
                 }
@@ -65,9 +73,10 @@ int main(void) {
 
             case RUNNING:
                 control_run(configuration);
-                uint8_t comand;
                 if (keypad_read(&command)) {
                     if (command == '*' || command == '#') {
+                        serial_printf("\tDESLIGANDO\n");
+                        control_stop();
                         state = WAITING_FOR_START;
                     }
                 }
