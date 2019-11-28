@@ -28,4 +28,7 @@ void serial_init(void);
  */
 void serial_printf(char* data);
 
+
+void serial_newline();
+
 #endif // __SERIAL_H__
