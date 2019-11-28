@@ -7,12 +7,10 @@
 #include <stdio.h>
 #include "main.h"
 #include "mcu.h"
-#include "serial.h"
 
-#include "control.h"
+#include "serial.h"
 #include "keypad.h"
-#include "fans.h"
-#include "rele.h"
+#include "control.h"
 
 /*****************************************
  * Private Constant Definitions
@@ -35,9 +33,7 @@ int main(void) {
     mcu_init();
     serial_init();
     keypad_init();
-    rele_init();
-    fans_init();
-    sensor_init();
+
 
     control_config_t configuration;
     state_t state = INIT;
@@ -47,14 +43,14 @@ int main(void) {
             uint8_t command;
             case INIT:
                 serial_printf("\tINICIALIZACAO\n");
-                configuration.temp = 45;
-                configuration.fan_out_speed = 75;
+                control_init(configuration);
                 serial_printf("Pressione enter para iniciar ou back para configurar\n");
                 state = WAITING_FOR_START;
                 break;
 
             case CONFIGURATION:
                 if (get_configuration(configuration)) {
+                    serial_printf("Pressione enter para iniciar ou back para reconfigurar\n");
                     state = WAITING_FOR_START;
                 }
                 break;
@@ -77,6 +73,7 @@ int main(void) {
                     if (command == '*' || command == '#') {
                         serial_printf("\tDESLIGANDO\n");
                         control_stop();
+                        serial_printf("Pressione enter para iniciar ou back para configurar\n");
                         state = WAITING_FOR_START;
                     }
                 }

@@ -1,8 +1,13 @@
 #include "control.h"
 
+#include <stdio.h>
+#include <string.h>
+
+#include "serial.h"
 #include "keypad.h"
 #include "fans.h"
 #include "rele.h"
+#include "sensor.h"
 
 #include "utils.h"
 
@@ -13,9 +18,18 @@ static float erro_ant = 0.0;
 
 uint16_t calc_temp(uint8_t* bufer, uint8_t size);
 
+void control_init(control_config_t configuration) {
+    fans_init();
+    rele_init();
+    sensor_init();
+    // leds_init();
+}
+
 bool get_configuration (control_config_t configuration) {
     uint8_t buffer[5];
     uint8_t size = 0;
+    serial_printf ("Digite a temperatura desejada\n");
+
     while (size < 5) {
         if (keypad_read(&buffer[size])) {
             if (buffer[size] == '#') {
@@ -29,6 +43,11 @@ bool get_configuration (control_config_t configuration) {
     }
     configuration.temp = constrain(calc_temp(buffer, size), 35, 60);
 
+    char str[100];
+    sprintf(str, "Temperatura escolhida: %d\n", configuration.temp);
+    serial_printf(str);
+    serial_printf("Escolha a potencia do ventilador:\n\t1 - BAIXA\n\t2 - MEDIA\n\t3 - ALTA\n");
+
     size = 0;
     while (size == 0) {
         if (keypad_read(buffer)) {
@@ -36,14 +55,17 @@ bool get_configuration (control_config_t configuration) {
             switch (buffer[0]) {
                 case '1':
                     configuration.fan_out_speed = 30;
+                    serial_printf("Potencia escolhida: BAIXA\n");
                     break;
 
                 case '2':
                     configuration.fan_out_speed = 65;
+                    serial_printf("Potencia escolhida: BAIXA\n");
                     break;
 
                 case '3':
                     configuration.fan_out_speed = 100;
+                    serial_printf("Potencia escolhida: ALTA\n");
                     break;
 
                 default:
@@ -60,7 +82,7 @@ void control_run(control_config_t configuration) {
     float erro = 0.0;
     float acao = 0.0;
     float kp = 20.0;
-    float ki 0.009;
+    float ki = 0.009;
 
     rele_control(RELE_CONTROL_ON);
 
@@ -78,7 +100,7 @@ void control_run(control_config_t configuration) {
             acao = 0.0;
         }
         fans_set(FAN_IN, acao + 20);
-        fan_set(FAN_OUT, configuration.fan_out_speed);
+        fans_set(FAN_OUT, configuration.fan_out_speed);
 
         erro_ant = erro;
         acao_ant = acao;
@@ -87,7 +109,7 @@ void control_run(control_config_t configuration) {
 
 void control_stop() {
     rele_control(RELE_CONTROL_ON);
-    fan_set(FAN_IN, 0);
+    fans_set(FAN_IN, 0);
     fans_set(FAN_OUT, 0);
 
     acao_ant = 0.0;

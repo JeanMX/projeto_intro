@@ -4,13 +4,14 @@
 #include <stdbool.h>
 
 #include "main.h"
-#include "gpio.h"
 #include "mcu.h"
 
 typedef struct control_config {
     uint16_t temp;
     uint16_t fan_out_speed;
 } control_config_t;
+
+void control_init(control_config_t configuration);
 
 bool get_configuration(control_config_t configuration);
 
