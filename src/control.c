@@ -9,6 +9,7 @@
 #include "rele.h"
 #include "sensor.h"
 
+#include "mcu.h"
 #include "utils.h"
 
 #define LOOP_TIME 200
@@ -114,6 +115,26 @@ void control_stop() {
 
     acao_ant = 0.0;
     erro_ant = 0.0;
+}
+
+void control_test() {
+    // for (;;) {
+    //     fans_set(FAN_IN, 100);
+    //     mcu_sleep(1000);
+    //     fans_set(FAN_OUT, 50);
+    //     mcu_sleep(1000);
+    //     fans_set(FAN_IN, 0);
+    //     mcu_sleep(1000);
+    //     fans_set(FAN_OUT, 0);
+    //     mcu_sleep(3000);
+    // }
+
+    for (;;) {
+        rele_control(RELE_CONTROL_ON);
+        mcu_sleep(5000);
+        rele_control(RELE_CONTROL_OFF);
+        mcu_sleep(1000);
+    }
 }
 
 uint16_t calc_temp(uint8_t* buffer, uint8_t size) {

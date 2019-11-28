@@ -20,7 +20,8 @@ typedef enum states {
     INIT,
     CONFIGURATION,
     WAITING_FOR_START,
-    RUNNING
+    RUNNING,
+    TESTING,
 } state_t;
 
 
@@ -37,6 +38,7 @@ int main(void) {
 
     control_config_t configuration;
     state_t state = INIT;
+    // state_t state = TESTING;
 
     for (;;) {
         switch (state) {
@@ -78,6 +80,10 @@ int main(void) {
                     }
                 }
                 break;
+
+            case TESTING:
+                control_init(configuration);
+                control_test();
         }
     }
 }

@@ -4,7 +4,6 @@
 #include <stdbool.h>
 
 #include "main.h"
-#include "mcu.h"
 
 typedef struct control_config {
     uint16_t temp;
@@ -18,5 +17,7 @@ bool get_configuration(control_config_t configuration);
 void control_run(control_config_t configuration);
 
 void control_stop();
+
+void control_test();
 
 #endif // __CONTROL_H__
