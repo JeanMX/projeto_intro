@@ -21,9 +21,4 @@
         "files.trimTrailingWhitespace": false,
         "files.trimFinalNewlines": false,
     },
-    "files.associations": {
-        "main.h": "c",
-        "keypadconfig.h": "c",
-        "gpio.h": "c"
-    },
 }
