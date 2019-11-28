@@ -10,11 +10,11 @@ typedef struct control_config {
     uint16_t fan_out_speed;
 } control_config_t;
 
-void control_init(control_config_t configuration);
+void control_init(control_config_t* configuration);
 
-bool get_configuration(control_config_t configuration);
+// bool get_configuration(control_config_t configuration);
 
-void control_run(control_config_t configuration);
+void control_run(control_config_t* configuration);
 
 void control_stop();
 
