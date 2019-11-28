@@ -18,10 +18,19 @@
 void keypad_init(void);
 
 /**
- * @brief Send data through serial comm.
+ * @brief Read data from keyboard
  *
- * @param c Pointer to store character
+ * @param value Pointer to keypad vaue read
+ *
+ * @retval true if success, false otherwise
  */
 bool keypad_read(uint8_t* value);
+
+/**
+ * @brief Read number from keyboard
+ *
+ * @retval Number read
+ */
+uint16_t keypad_read_number();
 
 #endif // __KEYPAD_H__

@@ -1,5 +1,7 @@
 #include "keypad.h"
 
+#include "serial.h" // SO PARA TESTE
+
 #define NUMBER_OF_LINES 4
 #define NUMBER_OF_COLUMNS 3
 
@@ -54,6 +56,7 @@ void keypad_init() {
     MX_GPIO_Init();
 }
 
+
 bool keypad_read(uint8_t* value) {
     bool pressed = false;
     int linha = 0;
@@ -87,4 +90,32 @@ bool keypad_read(uint8_t* value) {
     }
 
     return pressed;
+}
+
+uint16_t keypad_read_number() {
+    uint8_t aux_buffer[5];
+    uint8_t size = 0;
+    bool enter_pressed = false;
+
+    while (size < 5 && !enter_pressed) {
+        if (keypad_read(&aux_buffer[size])) {
+            if (aux_buffer[size] == '#') {
+                enter_pressed = true;
+            } else if (aux_buffer[size] == '*') {
+                size = 0;
+            } else {
+                size++;
+            }
+        }
+    }
+
+    uint16_t value = 0;
+    for (int i = 0; i < size; i++) {
+        uint16_t aux = 1;
+        for (int j = 0; j < (size-i-1); j++) {
+            aux *= 10;
+        }
+        value += (aux_buffer[i]-'0')*aux;
+    }
+    return value;
 }
