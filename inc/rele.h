@@ -16,4 +16,4 @@ void rele_init(void);
 
 void rele_control(rele_control_t control_state);
 
-#endif
+#endif // __RELE_H__

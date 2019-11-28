@@ -22,6 +22,6 @@ void keypad_init(void);
  *
  * @param c Pointer to store character
  */
-bool keypad_read(char* c);
+bool keypad_read(uint8_t* value);
 
 #endif // __KEYPAD_H__

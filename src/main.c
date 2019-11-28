@@ -8,39 +8,70 @@
 #include "main.h"
 #include "mcu.h"
 #include "serial.h"
+
+#include "control.h"
 #include "keypad.h"
+#include "fans.h"
+#include "rele.h"
 
 /*****************************************
  * Private Constant Definitions
  *****************************************/
 
-#define HIGH GPIO_PIN_SET
-#define LOW GPIO_PIN_RESET
+typedef enum states {
+    CONFIGURATION,
+    WAITING_FOR_START,
+    RUNNING
+} state_t;
+
 
 /*****************************************
  * Main Function
  *****************************************/
 
-char send_data[256];
-
-// void imprime_linha_coluna(int x, int y){
-//     // sprintf(send_data, "Teclado: ");
-//     // serial_printf(send_data);
-//     sprintf(send_data,"%c\n", buttons_symbols[x -1 ][y - 1]);
-
-//     serial_printf(send_data);
-//     mcu_sleep(10);
-// }
 
 int main(void) {
     mcu_init();
-    keypad_init();
     serial_init();
+    keypad_init();
+    // sensor_init();
+    fans_init();
+    rele_init();
+
+    control_config_t configuration;
+    configuration.temp = 55;
+    configuration.fan_out_speed = 75;
+
+    state_t state = CONFIGURATION;
 
     for (;;) {
-        if (keypad_read(send_data)) {
-            serial_printf(send_data);
+        switch (state) {
+            case CONFIGURATION:
+                if (get_configuration(configuration)) {
+                    state = WAITING_FOR_START;
+                }
+                break;
+
+            case WAITING_FOR_START:
+                uint8_t comand;
+                if (keypad_read(&command)) {
+                    if (command == '*') {
+                        state = CONFIGURATION;
+                    } else if (command == '#') {
+                        state = RUNNING;
+                    }
+                }
+                break;
+
+            case RUNNING:
+                control_run(configuration);
+                uint8_t comand;
+                if (keypad_read(&command)) {
+                    if (command == '*' || command == '#') {
+                        state = WAITING_FOR_START;
+                    }
+                }
+                break;
         }
-        mcu_sleep(10);
     }
 }
