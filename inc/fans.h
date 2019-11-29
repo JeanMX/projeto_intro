@@ -27,6 +27,7 @@ void fans_init(void);
  * @brief Set fan speed
  *
  * @param fan Which fan to control.
+ * @param speed Fan speed.
  */
 void fans_set(fan_t fan, uint16_t speed);
 
