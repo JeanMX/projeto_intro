@@ -111,7 +111,7 @@ void control_run(control_config_t* configuration) {
 
 
         char aux_buf[150];
-        sprintf(aux_buf, "Temperatura atual: %f ºC\r\nPWM ventilador: %d\r\n", actual_temperature, (uint16_t)(acao+20));
+        sprintf(aux_buf, "Temperatura atual: %d ºC\r\nPWM ventilador: %d\r\n", (uint16_t)(actual_temperature*100), (uint16_t)(acao+20));
         serial_printf(aux_buf);
 
         erro_ant = erro;
@@ -120,7 +120,7 @@ void control_run(control_config_t* configuration) {
 }
 
 void control_stop() {
-    rele_control(RELE_CONTROL_ON);
+    rele_control(RELE_CONTROL_OFF);
     fans_set(FAN_IN, 0);
     fans_set(FAN_OUT, 0);
 
@@ -151,7 +151,7 @@ void control_test() {
         if (timer_get() > 500) {
             timer_reset();
             char aux[50];
-            sprintf(aux, "Temperatura: %d\r\n", (uint8_t)sensor_get_temperature());
+            sprintf(aux, "Temperatura: %d\r\n", (uint16_t)(sensor_get_temperature()*100));
             serial_printf(aux);
         }
     }
