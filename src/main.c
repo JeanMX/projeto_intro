@@ -39,8 +39,8 @@ int main(void) {
 
 
     control_config_t configuration;
-    // state_t state = INIT;
-    state_t state = TESTING;
+    state_t state = INIT;
+    // state_t state = TESTING;
 
     for (;;) {
         switch (state) {
@@ -67,13 +67,13 @@ int main(void) {
                     if (keypad_read(&command)){
                         switch (command) {
                             case '1':
-                                configuration.fan_out_speed = 30;
+                                configuration.fan_out_speed = 45;
                                 serial_printf("Potencia escolhida: BAIXA\r\n");
                                 valido = true;
                                 break;
 
                             case '2':
-                                configuration.fan_out_speed = 65;
+                                configuration.fan_out_speed = 75;
                                 serial_printf("Potencia escolhida: MEDIA\r\n");
                                 valido = true;
                                 break;

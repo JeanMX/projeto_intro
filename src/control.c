@@ -24,7 +24,7 @@ void control_init(control_config_t* configuration) {
     // leds_init();
 
     configuration->temp = 35;
-    configuration->fan_out_speed = 30;
+    configuration->fan_out_speed = 45;
 }
 
 /*
