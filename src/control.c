@@ -21,68 +21,10 @@ void control_init(control_config_t* configuration) {
     fans_init();
     rele_init();
     sensor_init();
-    // leds_init();
 
     configuration->temp = 35;
     configuration->fan_out_speed = 45;
 }
-
-/*
-bool get_configuration (control_config_t configuration) {
-    uint8_t buffer[5];
-    uint8_t size = 0;
-    serial_printf ("Digite a temperatura desejada\r\n");
-
-    while (size < 5) {
-        if (keypad_read(&buffer[size])) {
-            if (buffer[size] == '#') {
-                break;
-            } else if (buffer[size] == '*') {
-                size = 0;
-            } else {
-                size++;
-            }
-        }
-    }
-    configuration.temp = constrain(calc_temp(buffer, size), 35, 60);
-
-     char str[100];
-    sprintf(str, "Temperatura escolhida: %d ºC\r\n", configuration.temp);
-    serial_printf(str);
-    serial_newline();
-    serial_printf("Escolha a potencia do ventilador:\r\n\t1 - BAIXA\r\n\t2 - MEDIA\r\n\t3 - ALTA\r\n");
-
-    size = 0;
-    while (size == 0) {
-        if (keypad_read(buffer)) {
-            size++;
-            switch (buffer[0]) {
-                case '1':
-                    configuration.fan_out_speed = 30;
-                    serial_printf("Potencia escolhida: BAIXA\r\n");
-                    break;
-
-                case '2':
-                    configuration.fan_out_speed = 65;
-                    serial_printf("Potencia escolhida: BAIXA\r\n");
-                    break;
-
-                case '3':
-                    configuration.fan_out_speed = 100;
-                    serial_printf("Potencia escolhida: ALTA\r\n");
-                    break;
-
-                default:
-                    size = 0;
-                    break;
-            }
-        }
-    }
-    serial_newline();
-
-    return true;
-}
-*/
 
 void control_run(control_config_t* configuration) {
     float erro = 0.0;
@@ -156,15 +98,3 @@ void control_test() {
         }
     }
 }
-
-// uint16_t calc_temp(uint8_t* buffer, uint8_t size) {
-//     uint16_t value = 0;
-//     for (int i = 0; i < size; i++) {
-//         uint16_t aux = 1;
-//         for (int j = 0; j < (size-i-1); j++) {
-//             aux *= 10;
-//         }
-//         value += (buffer[i]-'0')*aux;
-//     }
-//     return value;
-// }
